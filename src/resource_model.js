@@ -3,7 +3,6 @@ import defaults from 'lodash.defaults'
 import FetchingDataOptionsService from 'odd-fetching_data_options_service'
 
 let OPTIONS = new WeakMap()
-let API_BASE_PATH = new WeakMap()
 const DEFAULT_OPTIONS = {
   apiPath: '/api',
   apiVersion: 'v1',
@@ -16,12 +15,6 @@ const DEFAULT_OPTIONS = {
 export default class Base {
   constructor(options = {}, attributes = {}) {
     OPTIONS.set(this, defaults(options, DEFAULT_OPTIONS))
-    API_BASE_PATH.set(
-      this,
-      `${OPTIONS.get(this).apiPath}/${OPTIONS.get(this).apiVersion}/${OPTIONS.get(this).scope}/${
-        OPTIONS.get(this).resourceType
-      }`
-    )
 
     OPTIONS.get(this).attributes.forEach(attr => {
       this[attr] = attributes[attr]
@@ -34,7 +27,7 @@ export default class Base {
    * @returns {Promise} 回傳 response 或 errors
    */
   static all(options = {}) {
-    return axios.get(`${API_BASE_PATH.get(this)}?${FetchingDataOptionsService.call(options)}`)
+    return axios.get(`${new this().apiBasePath()}?${FetchingDataOptionsService.call(options)}`)
   }
 
   /**
@@ -44,7 +37,7 @@ export default class Base {
    * @returns {Promise} 回傳 response 或 errors
    */
   static find(id, options = {}) {
-    return axios.get(`${API_BASE_PATH.get(this)}/${id}?${FetchingDataOptionsService.call(options)}`)
+    return axios.get(`${new this().apiBasePath()}/${id}?${FetchingDataOptionsService.call(options)}`)
   }
 
   /**
@@ -54,9 +47,9 @@ export default class Base {
    */
   save() {
     if (this.isNewRecord()) {
-      return axios.post(API_BASE_PATH.get(this), this.requestBody())
+      return axios.post(this.apiBasePath(), this.requestBody())
     }
-    return axios.put(`${API_BASE_PATH.get(this)}/${this.id}`, this.requestBody())
+    return axios.put(`${this.apiBasePath()}/${this.id}`, this.requestBody())
   }
 
   /**
@@ -65,12 +58,18 @@ export default class Base {
    * @returns {Promise} 回傳 response 或 errors
    */
   destroy() {
-    return axios.delete(`${API_BASE_PATH.get(this)}/${this.id}`)
+    return axios.delete(`${this.apiBasePath()}/${this.id}`)
   }
 
   /**
    *  Helpers
    */
+  apiBasePath() {
+    return `${OPTIONS.get(this).apiPath}/${OPTIONS.get(this).apiVersion}/${OPTIONS.get(this).scope}/${
+      OPTIONS.get(this).resourceType
+    }`
+  }
+
   attributes(options = {}) {
     let result = {}
 
