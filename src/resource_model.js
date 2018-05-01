@@ -1,5 +1,6 @@
 import axios from 'axios'
 import defaults from 'lodash.defaults'
+import Errors from 'odd-error_object'
 import FetchingDataOptionsService from 'odd-fetching_data_options_service'
 
 let OPTIONS = new WeakMap()
@@ -19,6 +20,8 @@ export default class Base {
     OPTIONS.get(this).attributes.forEach(attr => {
       this[attr] = attributes[attr]
     })
+
+    this.errors = new Errors()
   }
 
   /**

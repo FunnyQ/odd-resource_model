@@ -47,7 +47,7 @@ const config = {
     extensions: ['.json', '.js']
   },
   plugins: plugins,
-  externals: ['axios', 'lodash.defaults', 'odd-fetching_data_options_service']
+  externals: ['axios', 'lodash.defaults', 'odd-error_object', 'odd-fetching_data_options_service']
 }
 
 module.exports = config
