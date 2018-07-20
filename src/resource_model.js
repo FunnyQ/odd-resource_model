@@ -67,10 +67,13 @@ export default class Base {
   /**
    *  Helpers
    */
-  apiBasePath() {
-    return `${OPTIONS.get(this).apiPath}/${OPTIONS.get(this).apiVersion}/${OPTIONS.get(this).scope}/${
-      OPTIONS.get(this).resourceType
-    }`
+  apiBasePath(options = {
+    withResourceType: true
+  }) {
+    let result = `${OPTIONS.get(this).apiPath}/${OPTIONS.get(this).apiVersion}/${OPTIONS.get(this).scope}`
+
+    if (options.withResourceType) result += `/${OPTIONS.get(this).resourceType}`
+    return result
   }
 
   attributes(options = {}) {
