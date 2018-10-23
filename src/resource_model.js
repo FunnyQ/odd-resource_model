@@ -96,6 +96,10 @@ export default class Base {
     return this.id === undefined
   }
 
+  isDataLoaded() {
+    return typeof this.id === 'string'
+  }
+
   requestBody() {
     return {
       data: {
