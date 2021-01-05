@@ -34,7 +34,7 @@
     "yargs": "^10.0.3"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "lodash.defaults": "^4.2.0",
     "odd-fetching_data_options_service": "https://github.com/FunnyQ/odd-fetching_data_options_service.git"
   }
